@@ -1,0 +1,49 @@
+<h2 class="text-center pt-3 mb-3">Employee Details</h2>
+<form class="d-flex justify-content-center">
+  <div class="form-group form-inline">
+      Search Here: <input class="form-control ml-2" type="text" [formControl]="filter"/>
+  </div>
+</form>
+<div class="table-responsive px-5">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Contact</th>
+        <th scope="col">Email</th>
+        <th scope="col">Joining Date</th>
+        <th scope="col">Department</th>
+        <th scope="col">WFH</th>
+        <th scope="col">Salary</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let employee of employees | async">
+        <td scope="row">{{ employee.firstName + ' ' + employee.lastName | titlecase }}</td>
+        <td scope="row">{{ employee.contact}}</td>
+        <td scope="row"><a href="mailto:{{employee.email}}">{{ employee.email}}</a></td>
+        <td scope="row">{{ employee.doj | date: 'MM/dd/yyyy'}}</td>
+        <td scope="row">{{ employee.department | titlecase}}</td>
+        <td scope="row">{{ employee.wfh ? 'Yes' : 'No'}}</td>
+        <td scope="row">{{ employee.salary}}</td>
+        <td scope="row"><a routerLink={{employee.id}}>Update</a></td>
+        <td scope="row"><a style="cursor: pointer;" (click)="onDeleteEmployeeClick(employee.id!)" class="text-primary">Delete</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshEmployees()">
+    </ngb-pagination>
+
+    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshEmployees()">
+      <option [ngValue]="2">2 items per page</option>
+      <option [ngValue]="4">4 items per page</option>
+      <option [ngValue]="6">6 items per page</option>
+    </select>
+  </div>
+</div>
+<div class="mt-3 d-flex justify-content-center">
+  <button class="btn btn-primary" routerLink="new">Create New Employee</button>
+</div>

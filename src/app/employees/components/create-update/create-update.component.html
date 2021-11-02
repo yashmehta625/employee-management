@@ -1,0 +1,18 @@
+<div class="d-flex justify-content-center align-items-center p-5">
+  <mat-card class="employee-create-card">
+    <mat-card-header class="justify-content-center">
+      <mat-card-title>Emploee Create</mat-card-title>
+    </mat-card-header>
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+      <mat-card-content>
+        <div *ngFor="let question of questions">
+          <app-create-update-question [question]="question" [form]="form"></app-create-update-question>
+        </div>
+      </mat-card-content>
+      <mat-card-actions class="d-flex justify-content-center">
+        <button class="btn btn-warning" type="submit" [disabled]="!form.valid">{{employeeId ? 'Update' : 'Save'}}</button>
+        <button class="btn btn-secondary ml-3" [routerLink]="['']">Back</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>
