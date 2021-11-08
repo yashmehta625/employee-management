@@ -19,11 +19,10 @@ export class EmployeesService {
       this.employeesRef.add(data).then(
         (data: DocumentReference) => {
           const docRef = this.employeesRef.doc<Employee>(data.id);
-          docRef.update({ id: data.id }).then(() => {
-            docRef.valueChanges().subscribe(
-              (employee) => observer.next(employee)
-            )
-          })
+          docRef.update({ id: data.id }).then(
+            () => docRef.valueChanges().subscribe(employee => observer.next(employee)),
+            (error) => observer.error(error)
+          )
         },
         (error: any) => observer.error(error)
       )
