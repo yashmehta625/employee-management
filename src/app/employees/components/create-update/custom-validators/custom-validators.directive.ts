@@ -29,8 +29,6 @@ export class CustomValidatorsDirective {
       confirmPassword.setErrors({password: true});
       return {noMatch: true}
     }
-
-    return (password === confirmPassword) ? null : {noMatch: true};
   }
 
 
