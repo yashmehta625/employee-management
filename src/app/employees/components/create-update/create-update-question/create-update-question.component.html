@@ -7,14 +7,19 @@
         [placeholder]="question.placeholder">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="this.form.get(question.key)?.invalid">{{question.error}}</mat-error>
+      <mat-error *ngIf="form.get(question.key)?.invalid">{{question.error}}</mat-error>
     </mat-form-field>
 
     <mat-form-field *ngSwitchCase="'input'" [class]="question.class" appearance="outline">
       <mat-label [attr.for]="question.key">{{question.label}}</mat-label>
+      <span *ngIf="question.key ==='salary'" matPrefix>₹&nbsp;</span>
+      <span *ngIf="question.key ==='contact'" matPrefix>+91&nbsp;</span>
       <input matInput [formControlName]="question.key" [id]="question.key" [type]="question.type"
         [placeholder]="question.placeholder">
-      <mat-error *ngIf="this.form.get(question.key)?.invalid">{{question.error}}</mat-error>
+      <mat-error *ngIf="question.key !=='confirmPassword' && form.get(question.key)?.invalid">{{question.error}}</mat-error>
+      <mat-error *ngIf="question.key ==='confirmPassword'
+        && form.errors?.['noMatch']
+        && (form.touched || form.dirty)">{{question.error}}</mat-error>
     </mat-form-field>
 
     <div *ngSwitchCase="'radio'" [class]="question.class">
@@ -33,14 +38,14 @@
           {{opt.value}}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="this.form.get(question.key)?.invalid">{{question.error}}</mat-error>
+      <mat-error *ngIf="form.get(question.key)?.invalid">{{question.error}}</mat-error>
     </mat-form-field>
 
     <mat-form-field *ngSwitchCase="'textArea'" [class]="question.class" appearance="outline">
       <mat-label [attr.for]="question.key">{{question.label}}</mat-label>
       <textarea matInput [formControlName]="question.key" [id]="question.key" [type]="question.type"
         [placeholder]="question.placeholder"></textarea>
-      <mat-error *ngIf="this.form.get(question.key)?.invalid">{{question.error}}</mat-error>
+      <mat-error *ngIf="form.get(question.key)?.invalid">{{question.error}}</mat-error>
     </mat-form-field>
 
     <div *ngSwitchCase="'toggle'" [class]="question.class">

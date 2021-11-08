@@ -10,5 +10,5 @@ export interface Employee {
   wfh?: boolean;
   salary?: number;
   department?: string;
-  skills?: { name: string, experience: number }[]
+  password?: string;
 }

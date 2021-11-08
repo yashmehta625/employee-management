@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
+import { CustomValidatorsDirective } from '../../custom-validators/custom-validators.directive';
 import { EmployeeBase } from '../../question-models/employee-base';
 
 @Injectable({
@@ -14,9 +15,9 @@ export class EmployeeControlService {
     const group: any = {};
 
     questions.forEach(question => {
-      group[question.key] = question.required ? new FormControl(question.value ? question.value : '', question.validators)
-        : new FormControl(question.value || '');
+      group[question.key] = question.validators.length > 0 ? new FormControl(question.value ? question.value : '', question.validators)
+        : new FormControl(question.value ? question.value : '');
     });
-    return new FormGroup(group);
+    return new FormGroup(group, { validators: CustomValidatorsDirective.matchPassword });
   }
 }

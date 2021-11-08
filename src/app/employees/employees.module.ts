@@ -16,13 +16,15 @@ import { EmployeeEffects } from './store/effects/employee.effects';
 import { CreateUpdateComponent } from './components/create-update/create-update.component';
 import { CreateUpdateQuestionComponent } from './components/create-update/create-update-question/create-update-question.component';
 import { ViewDeleteComponent } from './components/view-delete/view-delete.component';
+import { CustomValidatorsDirective } from './components/create-update/custom-validators/custom-validators.directive';
 
 
 @NgModule({
   declarations: [
     CreateUpdateComponent,
     CreateUpdateQuestionComponent,
-    ViewDeleteComponent
+    ViewDeleteComponent,
+    CustomValidatorsDirective,
   ],
   imports: [
     CommonModule,

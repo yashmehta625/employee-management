@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
 
 import { EmployeeBase } from './question-models/employee-base';
@@ -27,7 +27,8 @@ export class CreateUpdateComponent implements OnInit {
     private store: Store,
     private questionService: QuestionService,
     private employeeControlService: EmployeeControlService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
   }
 
@@ -67,6 +68,7 @@ export class CreateUpdateComponent implements OnInit {
             if(data && !isAlerted){
               isAlerted = true;
               alert("Employee Updated Successfully");
+              this.router.navigate(['']);
             }
           },
           (error) => alert("Employee Update Failed" + error)
@@ -79,6 +81,7 @@ export class CreateUpdateComponent implements OnInit {
             if(data && !isAlerted){
               isAlerted = true;
               alert("Employee Created Successfully");
+              this.router.navigate(['']);
             }
           },
           (error) => alert("Employee Create Failed :" + error)

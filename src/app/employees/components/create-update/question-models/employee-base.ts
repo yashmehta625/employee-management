@@ -40,6 +40,5 @@ export class EmployeeBase<T> {
     this.validators = options.validators || [];
     this.class = options.class || '';
     this.error = options.error || '';
-
   }
 }

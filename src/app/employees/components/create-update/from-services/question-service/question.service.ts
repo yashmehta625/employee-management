@@ -3,6 +3,7 @@ import { Validators } from '@angular/forms';
 import { of } from 'rxjs';
 
 import { Employee } from 'src/app/employees/model/employee.model';
+import { CustomValidatorsDirective } from '../../custom-validators/custom-validators.directive';
 import { EmployeeBase } from '../../question-models/employee-base';
 import { EmployeeDate } from '../../question-models/employee-date';
 import { EmployeeInput } from '../../question-models/employee-input';
@@ -31,7 +32,7 @@ export class QuestionService {
         controlType: 'input',
         type: 'text',
         placeholder: "Enter first name",
-        validators: [Validators.required],
+        validators: [Validators.required, CustomValidatorsDirective.cannotContainSpace],
         class: 'full-width',
         error: 'Enter valid first name and is required.'
       }),
@@ -45,7 +46,7 @@ export class QuestionService {
         controlType: 'input',
         type: 'text',
         placeholder: "Enter last name",
-        validators: [Validators.required],
+        validators: [Validators.required, CustomValidatorsDirective.cannotContainSpace],
         class: 'full-width',
         error: 'Enter valid last name and is required.'
       }),
@@ -59,7 +60,7 @@ export class QuestionService {
         controlType: 'input',
         type: 'number',
         placeholder: "Enter contact number",
-        validators: [Validators.required],
+        validators: [Validators.required, Validators.minLength(10), Validators.maxLength(10), CustomValidatorsDirective.cannotContainSpace],
         class: 'full-width',
         error: 'Enter valid contact and is required.'
       }),
@@ -73,9 +74,37 @@ export class QuestionService {
         controlType: 'input',
         type: 'email',
         placeholder: "Enter email address",
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required, Validators.email, CustomValidatorsDirective.cannotContainSpace],
         class: 'full-width',
         error: 'Enter valid email and is required.'
+      }),
+
+      new EmployeeInput({
+        value: employee ? employee.password : undefined,
+        key: 'password',
+        label: 'Password',
+        required: true,
+        order: 5,
+        controlType: 'input',
+        type: 'password',
+        placeholder: "Enter password",
+        validators: [Validators.required, Validators.minLength(3), CustomValidatorsDirective.cannotContainSpace],
+        class: 'full-width',
+        error: 'Enter valid password with lenght great than 3.'
+      }),
+
+      new EmployeeInput({
+        value: employee ? employee.password : undefined,
+        key: 'confirmPassword',
+        label: 'Confirm Password',
+        required: true,
+        order: 6,
+        controlType: 'input',
+        type: 'password',
+        placeholder: "Confirm Password",
+        validators: [Validators.required, CustomValidatorsDirective.cannotContainSpace],
+        class: 'full-width',
+        error: 'Password did not match'
       }),
 
       new EmployeeTextArea({
@@ -83,10 +112,10 @@ export class QuestionService {
         key: 'address',
         label: 'Address',
         required: true,
-        order: 5,
+        order: 7,
         controlType: 'textarea',
         placeholder: "Enter address",
-        validators: [Validators.required],
+        validators: [Validators.required, CustomValidatorsDirective.cannotContainSpace],
         class: 'full-width',
         error: 'Enter valid address and is required.'
       }),
@@ -96,7 +125,7 @@ export class QuestionService {
         key: 'doj',
         label: 'Date Of Joining',
         required: true,
-        order: 6,
+        order: 8,
         controlType: 'date',
         placeholder: "MM/DD/YYYY",
         validators: [Validators.required],
@@ -109,7 +138,7 @@ export class QuestionService {
         key: 'gender',
         label: 'Gender',
         required: true,
-        order: 7,
+        order: 9,
         options: [
           {key : 'male', value: 'Male'},
           {key : 'female', value: 'Female'},
@@ -126,7 +155,7 @@ export class QuestionService {
         key: 'salary',
         label: 'Salary',
         required: true,
-        order: 8,
+        order: 10,
         controlType: 'input',
         type: 'number',
         validators: [Validators.required],
@@ -139,7 +168,7 @@ export class QuestionService {
         key: 'wfh',
         label: 'Work From Home',
         required: true,
-        order: 9,
+        order: 11,
         controlType: 'toggle',
         validators: [],
         class: 'full-width mb-3'
@@ -150,7 +179,7 @@ export class QuestionService {
         key: 'department',
         label: 'Department',
         required: true,
-        order: 10,
+        order: 12,
         options: [
           {key : 'developer', value: 'Developer'},
           {key : 'sales/marketing', value: 'Sales / Marketing'},
