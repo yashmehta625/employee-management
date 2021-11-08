@@ -2,6 +2,10 @@ import { Action } from '@ngrx/store';
 import { Employee } from '../../model/employee.model';
 
 export enum EmployeeActionTypes {
+  CreateEmployeeId = '[Employee] Create EmployeeId',
+  CreateEmployeeIdSuccess = '[Employee] Create EmployeeId Success',
+  CreateEmployeeIdFailure = '[Employee] Create EmployeeId Failure',
+
   CreateEmployee = '[Employee] Create Employee',
   CreateEmployeeSuccess = '[Employee] Create Employee Success',
   CreateEmployeeFailure = '[Employee] Create Employee Failure',
@@ -21,6 +25,21 @@ export enum EmployeeActionTypes {
   DeleteEmployee = '[Employee] Delete Employee',
   DeleteEmployeeSuccess = '[Employee] Delete Employee Success',
   DeleteEmployeeFailure = '[Employee] Delete Employee Failure',
+}
+
+export class CreateEmployeeId implements Action {
+  readonly type = EmployeeActionTypes.CreateEmployeeId;
+  constructor() { }
+}
+
+export class CreateEmployeeIdSuccess implements Action {
+  readonly type = EmployeeActionTypes.CreateEmployeeIdSuccess;
+  constructor(public payload: { id: string }) { }
+}
+
+export class CreateEmployeeIdFailure implements Action {
+  readonly type = EmployeeActionTypes.CreateEmployeeIdFailure;
+  constructor(public payload: { error: any }) { }
 }
 
 export class CreateEmployee implements Action {
@@ -88,6 +107,9 @@ export class DeleteEmployeeFailure implements Action {
 }
 
 export type EmployeeActions =
+| CreateEmployeeId
+| CreateEmployeeIdSuccess
+| CreateEmployeeIdFailure
 | CreateEmployee
 | CreateEmployeeSuccess
 | CreateEmployeeFailure

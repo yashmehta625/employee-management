@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from '@angular/fire/compat/firestore';
-import { merge, Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { Employee } from '../model/employee.model';
 
@@ -13,16 +13,18 @@ export class EmployeesService {
   constructor(private afs: AngularFirestore) {
     this.employeesRef = afs.collection<Employee>('employees');
   }
+  getDocumentId() {
+    return of(this.employeesRef.doc().ref.id);
+  }
 
   create(data: Employee) {
     return new Observable<Employee>((observer) => {
-      this.employeesRef.add(data).then(
-        (data: DocumentReference) => {
-          const docRef = this.employeesRef.doc<Employee>(data.id);
-          docRef.update({ id: data.id }).then(
-            () => docRef.valueChanges().subscribe(employee => observer.next(employee)),
-            (error) => observer.error(error)
-          )
+      this.employeesRef.doc(data.id).set(data).then(
+        () => {
+          this.employeesRef.doc<Employee>(data.id).valueChanges().subscribe(
+            employee => observer.next(employee),
+            error => observer.error(error)
+          );
         },
         (error: any) => observer.error(error)
       )

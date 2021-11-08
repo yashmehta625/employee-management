@@ -76,6 +76,33 @@ export function employeeReducer(state = initialState, action: fromEmployee.Emplo
       };
     }
 
+    case fromEmployee.EmployeeActionTypes.CreateEmployeeId: {
+      return {
+        ...state,
+        creating: true,
+        created: false,
+      };
+    }
+
+
+    case fromEmployee.EmployeeActionTypes.CreateEmployeeIdSuccess: {
+      return {
+        ...state,
+        creating: false,
+        created: true,
+        selectedEmployeeId: action.payload.id
+      };
+    }
+
+    case fromEmployee.EmployeeActionTypes.CreateEmployeeIdFailure: {
+      return {
+        ...state,
+        creating: false,
+        created: false,
+        error: action.payload.error
+      };
+    }
+
     case fromEmployee.EmployeeActionTypes.CreateEmployee: {
       return {
         ...state,
@@ -85,11 +112,17 @@ export function employeeReducer(state = initialState, action: fromEmployee.Emplo
     }
 
     case fromEmployee.EmployeeActionTypes.CreateEmployeeSuccess: {
-      return employeeAdapter.addOne(action.payload.employee, {
-        ...state,
-        creating: false,
-        created: true
-      })
+      if(action && action.payload && action.payload.employee){
+        return employeeAdapter.addOne(action.payload.employee, {
+          ...state,
+          creating: false,
+          created: true,
+          selectedEmployeeId: action.payload?.employee?.id!,
+        })
+      }else{
+        return state
+      }
+
     }
 
     case fromEmployee.EmployeeActionTypes.CreateEmployeeFailure: {

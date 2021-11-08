@@ -5,9 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
 
 import { EmployeeBase } from './question-models/employee-base';
-import { CreateEmployee, LoadEmployee, LoadEmployees, UpdateEmployee } from '../../store/actions/employee.actions';
+import { CreateEmployee, CreateEmployeeId, LoadEmployee, LoadEmployees, UpdateEmployee } from '../../store/actions/employee.actions';
 import { Employee } from './../../model/employee.model'
-import { selectEmployee, selectEmployeeCreated } from '../../store/selectors/employee.selectors';
+import { selectEmployee, selectEmployeeCreated, selectEmployeeId, selectEmployeeIdCreated } from '../../store/selectors/employee.selectors';
 import { QuestionService } from './from-services/question-service/question.service';
 import { EmployeeControlService } from './from-services/employee-control-service/employee-control.service';
 
@@ -21,7 +21,7 @@ export class CreateUpdateComponent implements OnInit {
   questions: EmployeeBase<any>[] = [];
   form!: FormGroup;
   payLoad: Employee | undefined;
-  employeeId : string | null = null;
+  employeeId: string | null = null;
 
   constructor(
     private store: Store,
@@ -59,13 +59,13 @@ export class CreateUpdateComponent implements OnInit {
     let isAlerted = false
     this.payLoad = this.form.getRawValue();
     if (this.payLoad) {
-      if(this.employeeId){
+      if (this.employeeId) {
         this.payLoad.id = this.employeeId;
         this.payLoad.doj = this.payLoad.doj?.toString();
         this.store.dispatch(new UpdateEmployee({ employee: this.payLoad }))
         this.store.select(selectEmployeeCreated).subscribe(
           (data) => {
-            if(data && !isAlerted){
+            if (data && !isAlerted) {
               isAlerted = true;
               alert("Employee Updated Successfully");
               this.router.navigate(['']);
@@ -73,18 +73,34 @@ export class CreateUpdateComponent implements OnInit {
           },
           (error) => alert("Employee Update Failed" + error)
         )
-      }else{
+      } else {
         this.payLoad.doj = this.payLoad.doj?.toString();
-        this.store.dispatch(new CreateEmployee({ employee: this.payLoad }))
-        this.store.select(selectEmployeeCreated).subscribe(
-          (data) => {
-            if(data && !isAlerted){
-              isAlerted = true;
-              alert("Employee Created Successfully");
-              this.router.navigate(['']);
+        this.store.dispatch(new CreateEmployeeId());
+        this.store.select(selectEmployeeIdCreated).subscribe(
+          idCreationStatus => {
+            if (idCreationStatus) {
+              this.store.select(selectEmployeeId).subscribe(
+                id => {
+                  if (id && this.payLoad && !this.payLoad.id ) {
+                    this.payLoad.id = id
+                    this.store.dispatch(new CreateEmployee({ employee: this.payLoad! }))
+                    this.store.select(selectEmployeeCreated).subscribe(
+                      (employeeCreationStatus) => {
+                        if (employeeCreationStatus && !isAlerted) {
+                          isAlerted = true;
+                          alert("Employee Created Successfully");
+                          this.router.navigate(['']);
+                        }
+                      },
+                      (error) => alert("Employee Create Failed :" + error)
+                    )
+                  }
+                },
+                (error) => alert("Employee Create Failed :" + error)
+              )
             }
           },
-          (error) => alert("Employee Create Failed :" + error)
+          error => alert("Employee Create Failed :" + error)
         )
         this.form.reset();
       }
